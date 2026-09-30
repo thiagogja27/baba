@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Schedule, User } from '../types.ts';
-import { formatDateBR, formatDateWithWeekdayBR } from '../utils/date.ts';
+import { formatDateBR, formatDateWithWeekdayBR, calculateHoursDuration } from '../utils/date.ts';
 import {
   Calendar,
   Clock,
@@ -571,7 +571,9 @@ export const BabysitterDashboard: React.FC<BabysitterDashboardProps> = ({
                               </div>
 
                               <div className="text-[10px] text-slate-500 flex items-center justify-between">
-                                <span>{sch.startTime}</span>
+                                <span className="font-medium text-slate-600">
+                                  {sch.startTime}-{sch.endTime} ({calculateHoursDuration(sch.startTime, sch.endTime)})
+                                </span>
                                 {sch.isPackage && (
                                   <span className="text-[9px] bg-indigo-100 text-indigo-700 font-bold px-1 rounded">
                                     Pacote
@@ -698,8 +700,8 @@ export const BabysitterDashboard: React.FC<BabysitterDashboardProps> = ({
                               <Calendar className="w-4 h-4 text-rose-500" />
                               {formatDateWithWeekdayBR(schedule.date)}
                             </span>
-                            <span className="flex items-center gap-1 text-slate-500">
-                              <Clock className="w-3.5 h-3.5" /> {schedule.startTime} às {schedule.endTime}
+                            <span className="flex items-center gap-1 text-slate-600 font-medium">
+                              <Clock className="w-3.5 h-3.5 text-slate-400" /> {schedule.startTime} às {schedule.endTime} ({calculateHoursDuration(schedule.startTime, schedule.endTime)})
                             </span>
                           </div>
 
@@ -790,7 +792,7 @@ export const BabysitterDashboard: React.FC<BabysitterDashboardProps> = ({
                             {schedule.clientName}
                           </h3>
                           <div className="text-xs text-slate-500">
-                            Dia do Cuidado: <strong>{formatDateWithWeekdayBR(schedule.date)}</strong>
+                            Dia do Cuidado: <strong>{formatDateWithWeekdayBR(schedule.date)}</strong> • Horário: <strong>{schedule.startTime} às {schedule.endTime} ({calculateHoursDuration(schedule.startTime, schedule.endTime)})</strong>
                           </div>
                         </div>
                         <div className="text-right">
@@ -863,8 +865,8 @@ export const BabysitterDashboard: React.FC<BabysitterDashboardProps> = ({
                       <div className="text-xs text-slate-600">
                         Cliente: <strong>{schedule.clientName}</strong>
                       </div>
-                      <div className="text-[11px] text-slate-400">
-                        Horário: {schedule.startTime} às {schedule.endTime}
+                      <div className="text-[11px] text-slate-500">
+                        Horário: {schedule.startTime} às {schedule.endTime} ({calculateHoursDuration(schedule.startTime, schedule.endTime)})
                       </div>
                       <div className="text-[10px] text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded text-center font-medium">
                         OK confirmado • Aguardando pagamento
@@ -940,7 +942,7 @@ export const BabysitterDashboard: React.FC<BabysitterDashboardProps> = ({
                           Cliente: <strong>{schedule.clientName}</strong>
                         </div>
                         <div className="text-[11px] text-slate-500">
-                          Bebê: {schedule.babyName} • {schedule.startTime} às {schedule.endTime}
+                          Bebê: {schedule.babyName} • {schedule.startTime} às {schedule.endTime} ({calculateHoursDuration(schedule.startTime, schedule.endTime)})
                         </div>
 
                         {schedule.isPackage && (
@@ -1057,7 +1059,7 @@ export const BabysitterDashboard: React.FC<BabysitterDashboardProps> = ({
                   Cliente: <strong>{confirmModal.schedule.clientName}</strong>
                 </div>
                 <div className="text-slate-500">
-                  Horário: {confirmModal.schedule.startTime} às {confirmModal.schedule.endTime}
+                  Horário: {confirmModal.schedule.startTime} às {confirmModal.schedule.endTime} ({calculateHoursDuration(confirmModal.schedule.startTime, confirmModal.schedule.endTime)} no dia)
                 </div>
                 <div className="text-slate-500">
                   Bebê: {confirmModal.schedule.babyName} {confirmModal.schedule.babyAge ? `(${confirmModal.schedule.babyAge})` : ''}
